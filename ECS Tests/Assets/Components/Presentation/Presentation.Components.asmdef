@@ -1,0 +1,17 @@
+{
+    "name": "Presentation.Components",
+    "references": [
+        "GUID:271f9c91e76001d43a45bc01e397929d",
+        "GUID:734d92eba21c94caba915361bd5ac177",
+        "GUID:ec4859cff64c4fc4aac496e835293ed8"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

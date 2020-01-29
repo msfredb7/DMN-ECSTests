@@ -1,0 +1,23 @@
+{
+    "name": "Presentation.Systems",
+    "references": [
+        "GUID:8b441396d24a51c4abb032b847d66436",
+        "GUID:271f9c91e76001d43a45bc01e397929d",
+        "GUID:30b4962e2fe5afa4884b6f9ad75f31c5",
+        "GUID:734d92eba21c94caba915361bd5ac177",
+        "GUID:2665a8d13d1b3f18800f46e256720795",
+        "GUID:d8b63aba1907145bea998dd612889d6b",
+        "GUID:a5baed0c9693541a5bd947d336ec7659",
+        "GUID:5f3cf485eb0554709a8abbeace890c86",
+        "GUID:8819f35a0fc84499b990e90a4ca1911f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
