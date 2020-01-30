@@ -7,11 +7,18 @@ using UnityEngine;
 [UpdateInGroup(typeof(PresentationSystemGroup))]
 public class EndViewSystem : ComponentSystem
 {
+    WorldMaster _worldMaster;
+
+    protected override void OnCreate()
+    {
+        base.OnCreate();
+
+        _worldMaster = World.GetOrCreateSystem<WorldMaster>();
+    }
+
     protected override void OnUpdate()
     {
-        if (WorldMaster.SimulationWorld == null)
-            return;
         World.EntityManager.CompleteAllJobs();
-        WorldMaster.SimulationWorld.EntityManager.EndExclusiveEntityTransaction();
+        _worldMaster.SimulationWorld.EntityManager.EndExclusiveEntityTransaction();
     }
 }

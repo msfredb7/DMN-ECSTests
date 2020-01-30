@@ -7,29 +7,19 @@ using Unity.Transforms;
 
 public class ViewTransformSystem : ViewJobComponentSystem
 {
-    EntityQuery _simTranslations;
-
     protected override JobHandle OnUpdate(JobHandle jobHandle)
     {
-        if (WorldMaster.SimulationWorld == null)
-            return jobHandle;
-
-        if (_simTranslations == null)
-        {
-            _simTranslations = WorldMaster.SimulationWorld.EntityManager.CreateEntityQuery(ComponentType.ReadOnly<Translation>());
-        }
-
         return new ViewTransformJob()
         {
-            SimTranslations = WorldMaster.SimulationWorld.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>().GetComponentDataFromEntity<Translation>()
+            SimTranslations = SimSystem.GetComponentDataFromEntity<Translation>(isReadOnly: true)
         }.Schedule(this, jobHandle);
     }
 
-    struct ViewTransformJob : IJobForEach<Translation, LinkedSimEntity>
+    struct ViewTransformJob : IJobForEach<Translation, BindedSimEntity>
     {
         [ReadOnly] public ComponentDataFromEntity<Translation> SimTranslations;
 
-        public void Execute(ref Translation translation, [ReadOnly] ref LinkedSimEntity linkedSimEntity)
+        public void Execute(ref Translation translation, [ReadOnly] ref BindedSimEntity linkedSimEntity)
         {
             if (SimTranslations.Exists(linkedSimEntity.SimWorldEntity))
             {

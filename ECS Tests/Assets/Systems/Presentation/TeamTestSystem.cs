@@ -19,11 +19,11 @@ public class TeamTestSystem : ViewJobComponentSystem
         //}.Schedule(this, jobHandle);
     }
 
-    struct TeamTestJob : IJobForEach<Team, LinkedSimEntity>
+    struct TeamTestJob : IJobForEach<Team, BindedSimEntity>
     {
         [ReadOnly] public ComponentDataFromEntity<Translation> SimTranslations;
 
-        public void Execute(ref Team team, [ReadOnly] ref LinkedSimEntity linkedSimEntity)
+        public void Execute(ref Team team, [ReadOnly] ref BindedSimEntity linkedSimEntity)
         {
             float t = 0;
             for (int i = 0; i < 1000; i++)

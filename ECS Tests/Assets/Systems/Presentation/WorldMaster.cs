@@ -5,12 +5,9 @@ using System.Reflection;
 using Unity.Entities;
 using UnityEngine;
 
-public class WorldMaster : MonoBehaviour
+public class WorldMaster : ComponentSystem
 {
-    public static World SimulationWorld => s_instance?._simulationWorld;
-
-    World _simulationWorld;
-    static WorldMaster s_instance;
+    public World SimulationWorld { get; private set; }
 
     static Dictionary<SimConvertToEntity, ViewConvertToEntity> ToConvert = new Dictionary<SimConvertToEntity, ViewConvertToEntity>();
     static List<ViewConvertToEntity> LoneViewsToConvert = new List<ViewConvertToEntity>();
@@ -18,56 +15,67 @@ public class WorldMaster : MonoBehaviour
     static GameObjectConversionSettings _simConversionSettings;
     static GameObjectConversionSettings _viewConversionSettings;
 
-    private void Awake()
+    bool updatePlayerLoop = false;
+
+    protected override void OnCreate()
     {
-        s_instance = this;
-        _simulationWorld = new World("Simulation World");
-        InitializationSystemGroup initGroup = _simulationWorld.CreateSystem<InitializationSystemGroup>();
-        SimulationSystemGroup simGroup = _simulationWorld.CreateSystem<SimulationSystemGroup>();
-        PresentationSystemGroup presGroup = _simulationWorld.CreateSystem<PresentationSystemGroup>();
+        base.OnCreate();
 
-        initGroup.AddSystemToUpdateList(_simulationWorld.CreateSystem<BeginInitializationEntityCommandBufferSystem>());
-        initGroup.AddSystemToUpdateList(_simulationWorld.CreateSystem<EndInitializationEntityCommandBufferSystem>());
-        initGroup.AddSystemToUpdateList(_simulationWorld.CreateSystem<UpdateWorldTimeSystem>());
+        SimulationWorld = new World("Simulation World");
+        InitializationSystemGroup initGroup = SimulationWorld.CreateSystem<InitializationSystemGroup>();
+        SimulationSystemGroup simGroup = SimulationWorld.CreateSystem<SimulationSystemGroup>();
+        PresentationSystemGroup presGroup = SimulationWorld.CreateSystem<PresentationSystemGroup>();
 
-        simGroup.AddSystemToUpdateList(_simulationWorld.CreateSystem<BeginSimulationEntityCommandBufferSystem>());
-        simGroup.AddSystemToUpdateList(_simulationWorld.CreateSystem<EndSimulationEntityCommandBufferSystem>());
+        initGroup.AddSystemToUpdateList(SimulationWorld.CreateSystem<BeginInitializationEntityCommandBufferSystem>());
+        initGroup.AddSystemToUpdateList(SimulationWorld.CreateSystem<EndInitializationEntityCommandBufferSystem>());
+        initGroup.AddSystemToUpdateList(SimulationWorld.CreateSystem<UpdateWorldTimeSystem>());
+
+        simGroup.AddSystemToUpdateList(SimulationWorld.CreateSystem<BeginSimulationEntityCommandBufferSystem>());
+        simGroup.AddSystemToUpdateList(SimulationWorld.CreateSystem<EndSimulationEntityCommandBufferSystem>());
         foreach (Type systemType in GetTypesDerivedFrom(typeof(SimComponentSystem)))
         {
-            simGroup.AddSystemToUpdateList(_simulationWorld.CreateSystem(systemType));
+            simGroup.AddSystemToUpdateList(SimulationWorld.CreateSystem(systemType));
         }
         foreach (Type systemType in GetTypesDerivedFrom(typeof(SimJobComponentSystem)))
         {
-            simGroup.AddSystemToUpdateList(_simulationWorld.CreateSystem(systemType));
+            simGroup.AddSystemToUpdateList(SimulationWorld.CreateSystem(systemType));
         }
 
-        presGroup.AddSystemToUpdateList(_simulationWorld.CreateSystem<BeginPresentationEntityCommandBufferSystem>());
+        presGroup.AddSystemToUpdateList(SimulationWorld.CreateSystem<BeginPresentationEntityCommandBufferSystem>());
+        //presGroup.AddSystemToUpdateList(SimulationWorld.CreateSystem<SimPresentationSystemAccess>());
 
         initGroup.SortSystemUpdateList();
         simGroup.SortSystemUpdateList();
         presGroup.SortSystemUpdateList();
 
-        ScriptBehaviourUpdateOrder.UpdatePlayerLoop(_simulationWorld, ScriptBehaviourUpdateOrder.CurrentPlayerLoop);
+        updatePlayerLoop = true;
+        //ScriptBehaviourUpdateOrder.UpdatePlayerLoop(_simulationWorld, ScriptBehaviourUpdateOrder.CurrentPlayerLoop);
 
-        _simConversionSettings = new GameObjectConversionSettings(_simulationWorld, GameObjectConversionUtility.ConversionFlags.AssignName);
+        _simConversionSettings = new GameObjectConversionSettings(SimulationWorld, GameObjectConversionUtility.ConversionFlags.AssignName);
         _viewConversionSettings = new GameObjectConversionSettings(World.DefaultGameObjectInjectionWorld, GameObjectConversionUtility.ConversionFlags.AssignName);
     }
 
-    private void Update()
+    protected override void OnUpdate()
     {
         if (ToConvert.Count > 0 || LoneViewsToConvert.Count > 0)
             Convert();
 
+        if (updatePlayerLoop)
+        {
+            ScriptBehaviourUpdateOrder.UpdatePlayerLoop(SimulationWorld, ScriptBehaviourUpdateOrder.CurrentPlayerLoop);
+            updatePlayerLoop = false;
+        }
+
         //_simulationWorld.Update();
     }
 
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
-        if (_simulationWorld.IsCreated)
-            _simulationWorld.Dispose();
-        _simulationWorld = null;
-        if (s_instance == this)
-            s_instance = null;
+        base.OnDestroy();
+
+        if (SimulationWorld.IsCreated)
+            SimulationWorld.Dispose();
+        SimulationWorld = null;
     }
 
     void Convert()
@@ -82,7 +90,7 @@ public class WorldMaster : MonoBehaviour
             if (viewGO != null)
             {
                 Entity viewEntity = ConvertGameObject(viewGO, _viewConversionSettings);
-                _viewConversionSettings.DestinationWorld.EntityManager.AddComponentData(viewEntity, new LinkedSimEntity()
+                _viewConversionSettings.DestinationWorld.EntityManager.AddComponentData(viewEntity, new BindedSimEntity()
                 {
                     SimWorldEntity = simEntity
                 });
@@ -131,7 +139,7 @@ public class WorldMaster : MonoBehaviour
     {
         Entity entity = GameObjectConversionUtility.ConvertGameObjectHierarchy(root.gameObject, settings);
         if (root.ConversionMode == ConvertToEntity.Mode.ConvertAndDestroy)
-            DestroyImmediate(root.gameObject);
+            UnityEngine.Object.DestroyImmediate(root.gameObject);
 
         return entity;
     }

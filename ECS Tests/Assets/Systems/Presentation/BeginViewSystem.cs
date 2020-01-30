@@ -1,18 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
 [UpdateInGroup(typeof(PresentationSystemGroup))]
 public class BeginViewSystem : ComponentSystem
 {
-    public ExclusiveEntityTransaction ExclusiveSimWorld;
+    [ReadOnly] public ExclusiveEntityTransaction ExclusiveSimWorld;
+
+    WorldMaster _worldMaster;
+
+    protected override void OnCreate()
+    {
+        base.OnCreate();
+
+        _worldMaster = World.GetOrCreateSystem<WorldMaster>();
+    }
 
     protected override void OnUpdate()
     {
-        if (WorldMaster.SimulationWorld == null)
-            return;
-
-        ExclusiveSimWorld = WorldMaster.SimulationWorld.EntityManager.BeginExclusiveEntityTransaction();
+        ExclusiveSimWorld = _worldMaster.SimulationWorld.EntityManager.BeginExclusiveEntityTransaction();
     }
 }

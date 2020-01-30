@@ -16,4 +16,12 @@ public static class EntityExtensions
     {
         entityManager.SetComponentData(entity, data);
     }
+    public static bool IsNull(this in Entity entity)
+    {
+        return entity == Entity.Null;
+    }
+    public static bool Exists(this in Entity entity, EntityManager entityManager)
+    {
+        return entityManager.Exists(entity);
+    }
 }
