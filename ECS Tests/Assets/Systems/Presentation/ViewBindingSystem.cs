@@ -7,12 +7,8 @@ using Unity.Transforms;
 using static Unity.Mathematics.math;
 
 
-struct BlobTest
-{
 
-}
-
-public class SimViewBindingSystem : ViewJobComponentSystem
+public class ViewBindingSystem : ViewJobComponentSystem
 {
     private EntityQuery _newSimEntitiesQ;
     private BeginPresentationEntityCommandBufferSystem _ecbSystem;
@@ -23,6 +19,8 @@ public class SimViewBindingSystem : ViewJobComponentSystem
 
         _newSimEntitiesQ = SimWorld.EntityManager.CreateEntityQuery(ComponentType.ReadOnly<NewlyCreatedTag>(), ComponentType.ReadOnly<BlueprintId>());
         _ecbSystem = World.GetOrCreateSystem<BeginPresentationEntityCommandBufferSystem>();
+
+        RequireSingletonForUpdate<BlobAssetReferenceComponent<ViewBindingSystemSettings>>();
     }
 
     protected override JobHandle OnUpdate(JobHandle inputDependencies)
@@ -30,14 +28,10 @@ public class SimViewBindingSystem : ViewJobComponentSystem
         var jobHandle = new FetchNewSimEntitiesJob()
         {
             Ecb = _ecbSystem.CreateCommandBuffer().ToConcurrent(),
-            VisualPrefab = EntityManager.GetComponentData<ViewBindingSystemSettings>(GetSingletonEntity<ViewBindingSystemSettings>()).Prefab
+            SettingsRef = GetSingleton<BlobAssetReferenceComponent<ViewBindingSystemSettings>>().Value
         }.Schedule(_newSimEntitiesQ, inputDependencies);
 
         _ecbSystem.AddJobHandleForProducer(jobHandle);
-
-        BlobBuilder blobBuilder = new BlobBuilder();
-        BlobTest blobTest = blobBuilder.ConstructRoot<BlobTest>();
-         blobBuilder.CreateBlobAssetReference(Allocator.Persistent);
 
         return jobHandle;
     }
@@ -46,12 +40,21 @@ public class SimViewBindingSystem : ViewJobComponentSystem
     struct FetchNewSimEntitiesJob : IJobForEachWithEntity_ECC<NewlyCreatedTag, BlueprintId>
     {
         public EntityCommandBuffer.Concurrent Ecb;
-        public Entity VisualPrefab;
+        public BlobAssetReference<ViewBindingSystemSettings> SettingsRef;
 
-        public void Execute(Entity simEntity, int index, [ReadOnly] ref NewlyCreatedTag c0, [ReadOnly] ref BlueprintId c1)
+        public void Execute(Entity simEntity, int index, [ReadOnly] ref NewlyCreatedTag c0, [ReadOnly] ref BlueprintId blueprintId)
         {
-            Entity viewEntity = Ecb.Instantiate(index, VisualPrefab);
-            Ecb.AddComponent(index, viewEntity, new BindedSimEntity() { SimWorldEntity = simEntity });
+            ref var settings = ref SettingsRef.Value;
+
+            for (int i = 0; i < settings.BlueprintIds.Length; i++)
+            {
+                if (settings.BlueprintIds[i] == blueprintId.Value)
+                {
+                    Entity presentationEntity = Ecb.Instantiate(index, settings.BlueprintPresentationEntities[i]);
+                    Ecb.AddComponent(index, presentationEntity, new BindedSimEntity() { SimWorldEntity = simEntity });
+                    break;
+                }
+            }
         }
     }
 }

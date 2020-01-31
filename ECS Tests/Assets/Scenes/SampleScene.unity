@@ -131,9 +131,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 20082613}
-  - component: {fileID: 20082614}
   - component: {fileID: 20082615}
   - component: {fileID: 20082616}
+  - component: {fileID: 20082614}
   m_Layer: 0
   m_Name: Settings - ViewBindingSystem
   m_TagString: Untagged
@@ -164,10 +164,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 20082612}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90b77cf3c77791b479173d51661ec3dc, type: 3}
+  m_Script: {fileID: 11500000, guid: 36ba2c03eabf3b74487332d2d2376585, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Prefab: {fileID: 8066926490149118820, guid: b228c264e9cee9e4f813a6b294a5c5a8, type: 3}
+  BlueprintDefinitions:
+  - PresentationGameObject: {fileID: 8066926490149118820, guid: b228c264e9cee9e4f813a6b294a5c5a8,
+      type: 3}
+    BlueprintId: 2
+  - PresentationGameObject: {fileID: 4140178117109272919, guid: df6f095931dce7d4dae8293f77977414,
+      type: 3}
+    BlueprintId: 1
+  - PresentationGameObject: {fileID: 3870322439160361191, guid: 8b8a04bb5cb80484c98519bad4320566,
+      type: 3}
+    BlueprintId: 0
 --- !u!114 &20082615
 MonoBehaviour:
   m_ObjectHideFlags: 0

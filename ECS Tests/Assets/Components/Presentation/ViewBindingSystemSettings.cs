@@ -2,16 +2,13 @@
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
+using UnityEngine;
+
+[assembly: RegisterGenericComponentType(typeof(BlobAssetReferenceComponent<ViewBindingSystemSettings>))]
 
 [Serializable]
-[GenerateAuthoringComponent]
-public struct ViewBindingSystemSettings : IComponentData
+public struct ViewBindingSystemSettings
 {
-    public Entity Prefab;
+    public BlobArray<Entity> BlueprintPresentationEntities;
+    public BlobArray<int> BlueprintIds;
 }
-
-//[Serializable]
-//public struct ViewBindingSystemSettings : IComponentData
-//{
-//    public Entity Prefab;
-//}

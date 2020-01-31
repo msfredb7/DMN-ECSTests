@@ -1,0 +1,2 @@
+1. ExclusiveEntityTransaction: Changed CheckAccess() to CheckWriteAccess() and CheckReadAccess(). Methods like Exists(entity) and GetComponentData<T>(entity) now only check for read access
+2. Updated Test assemblies so that it compiles with latest Unity Test package.
