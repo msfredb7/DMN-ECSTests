@@ -36,9 +36,7 @@ public class ViewBindingSystemSettingsAuth : MonoBehaviour, IConvertGameObjectTo
         ref ViewBindingSystemSettings root = ref blobBuilder.ConstructRoot<ViewBindingSystemSettings>();
 
         var ids = blobBuilder.Allocate(ref root.BlueprintIds, BlueprintDefinitions.Count);
-        var presentationEntities = blobBuilder.Allocate(ref root.BlueprintPresentationEntities, BlueprintDefinitions.Count + 100000000);
-        Debug.LogWarning("MEMORY LEAK! MUST DISPOSE!");
-
+        var presentationEntities = blobBuilder.Allocate(ref root.BlueprintPresentationEntities, BlueprintDefinitions.Count);
 
         for (int i = 0; i < BlueprintDefinitions.Count; i++)
         {
