@@ -6,19 +6,12 @@ using UnityEngine;
 
 public class ViewBindingSystemSettingsAuth : MonoBehaviour, IConvertGameObjectToEntity, IDeclareReferencedPrefabs
 {
-    [System.Serializable]
-    public struct BlueprintDefinition
-    {
-        public GameObject PresentationGameObject;
-        public int BlueprintId;
-    }
-
     public List<BlueprintDefinition> BlueprintDefinitions;
 
     public void DeclareReferencedPrefabs(List<GameObject> referencedPrefabs)
     {
         foreach (var item in BlueprintDefinitions)
-            referencedPrefabs.Add(item.PresentationGameObject);
+            referencedPrefabs.Add(item.GetViewGameObject());
     }
 
     public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
@@ -36,12 +29,12 @@ public class ViewBindingSystemSettingsAuth : MonoBehaviour, IConvertGameObjectTo
         ref ViewBindingSystemSettings root = ref blobBuilder.ConstructRoot<ViewBindingSystemSettings>();
 
         var ids = blobBuilder.Allocate(ref root.BlueprintIds, BlueprintDefinitions.Count);
-        var presentationEntities = blobBuilder.Allocate(ref root.BlueprintPresentationEntities, BlueprintDefinitions.Count);
+        var viewEntities = blobBuilder.Allocate(ref root.BlueprintPresentationEntities, BlueprintDefinitions.Count);
 
         for (int i = 0; i < BlueprintDefinitions.Count; i++)
         {
-            ids[i] = BlueprintDefinitions[i].BlueprintId;
-            presentationEntities[i] = conversionSystem.GetPrimaryEntity(BlueprintDefinitions[i].PresentationGameObject);
+            ids[i] = BlueprintDefinitions[i].GetBlueprintId().Value;
+            viewEntities[i] = conversionSystem.GetPrimaryEntity(BlueprintDefinitions[i].GetViewGameObject());
         }
 
         BlobAssetReference<ViewBindingSystemSettings> blobRef = blobBuilder.CreateBlobAssetReference<ViewBindingSystemSettings>(Allocator.Persistent);

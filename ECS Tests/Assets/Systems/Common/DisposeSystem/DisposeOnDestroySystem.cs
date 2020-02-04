@@ -42,7 +42,6 @@ public class DisposeOnDestroySystem : ComponentSystem
                     
                     if (componentDataArray is IDisposable disposable)
                     {
-                        Debug.Log("Dispose ");
                         disposable.Dispose();
                     }
                 }

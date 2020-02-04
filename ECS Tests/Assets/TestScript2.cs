@@ -1,12 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Unity.Entities;
 using UnityEngine;
 
-public class SimConvertToEntity : ConvertToEntity
+public class TestScript2 : MonoBehaviour
 {
     void Awake()
     {
-        WorldMaster.AddToConvert(this);
+        Debug.Log("TestScript2");
     }
 }

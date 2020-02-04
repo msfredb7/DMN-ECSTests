@@ -9,11 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1621414273515638263}
-  - component: {fileID: -8005642512028925715}
-  - component: {fileID: 1621414273515638264}
-  - component: {fileID: -6233563086945980152}
+  - component: {fileID: -1969253378047794497}
+  - component: {fileID: 1621414273515638265}
   m_Layer: 0
-  m_Name: ItemMoveDistanceBoost
+  m_Name: SE_Item_MoveSpeedBoost
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27,13 +26,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1621414273515638266}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.0588245, y: -1.0786359, z: 0.07155228}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-8005642512028925715
+--- !u!114 &-1969253378047794497
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -45,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16c030b53494a3c4294d4acdb5dfc2db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1621414273515638264
+--- !u!114 &1621414273515638265
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -54,20 +53,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1621414273515638266}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c858ade7289460e48b7f4844a6110549, type: 3}
+  m_Script: {fileID: 11500000, guid: ea63959f8c67d0743bfc7fd8cdce3b06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ConversionMode: 0
---- !u!114 &-6233563086945980152
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1621414273515638266}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7520af2f543296847a0479668d598699, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  AdditionalMoveDistance: 1
+  AdditionalMoveSpeed: 10

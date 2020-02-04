@@ -14,11 +14,9 @@ GameObject:
   - component: {fileID: 7665098200607330809}
   - component: {fileID: 7665098200607330808}
   - component: {fileID: 7665098200607330813}
-  - component: {fileID: 7665098200607330803}
   - component: {fileID: 7665098200607330812}
-  - component: {fileID: 7665098200607330811}
   m_Layer: 0
-  m_Name: Pawn
+  m_Name: SE_Pawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -105,19 +103,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Value: 1
---- !u!114 &7665098200607330803
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7665098200607330800}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c858ade7289460e48b7f4844a6110549, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ConversionMode: 0
 --- !u!114 &7665098200607330812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -130,16 +115,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbf7ddbce7c2fce4db8b6ac54db75737, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &7665098200607330811
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7665098200607330800}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 967113646f373404ca79ef2afa3bcf26, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Value: 2
