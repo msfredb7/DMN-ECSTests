@@ -4,7 +4,6 @@ using Unity.Entities;
 using Unity.Mathematics;
 
 [Serializable]
-[GenerateAuthoringComponent]
 public struct BlueprintId : IComponentData, IValueComponent<int>, IEquatable<BlueprintId>
 {
     public int Value;

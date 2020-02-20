@@ -10,7 +10,7 @@ public abstract class ViewComponentSystem : ComponentSystem
 {
     WorldMaster _worldMaster;
     BeginViewSystem _beginViewSystem;
-    EndSimulationEntityCommandBufferSystem _aSimSystem;
+    ComponentSystem _aSimSystem;
 
     protected override void OnCreate()
     {
@@ -19,7 +19,7 @@ public abstract class ViewComponentSystem : ComponentSystem
         _worldMaster = World.GetOrCreateSystem<WorldMaster>();
         _beginViewSystem = World.GetOrCreateSystem<BeginViewSystem>();
         
-        _aSimSystem = SimWorld.GetExistingSystem<EndSimulationEntityCommandBufferSystem>();
+        _aSimSystem = SimWorld.GetExistingSystem<InitializationSystemGroup>();
     }
 
     protected World SimWorld => _worldMaster.SimulationWorld;
@@ -34,7 +34,7 @@ public abstract class ViewJobComponentSystem : JobComponentSystem
 {
     WorldMaster _worldMaster;
     BeginViewSystem _beginViewSystem;
-    EndSimulationEntityCommandBufferSystem _aSimSystem;
+    ComponentSystem _aSimSystem;
 
     protected override void OnCreate()
     {
@@ -43,7 +43,7 @@ public abstract class ViewJobComponentSystem : JobComponentSystem
         _worldMaster = World.GetOrCreateSystem<WorldMaster>();
         _beginViewSystem = World.GetOrCreateSystem<BeginViewSystem>();
 
-        _aSimSystem = SimWorld.GetExistingSystem<EndSimulationEntityCommandBufferSystem>();
+        _aSimSystem = SimWorld.GetExistingSystem<InitializationSystemGroup>();
     }
 
     protected World SimWorld => _worldMaster.SimulationWorld;

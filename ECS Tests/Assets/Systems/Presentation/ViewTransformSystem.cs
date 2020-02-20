@@ -7,6 +7,7 @@ using Unity.Transforms;
 
 public class ViewTransformSystem : ViewJobComponentSystem
 {
+
     protected override JobHandle OnUpdate(JobHandle jobHandle)
     {
         return new ViewTransformJob()

@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using Unity.Collections;
 using Unity.Entities;
-using UnityEngine;
 
 [UpdateAfter(typeof(CollisionSystem))]
 public class ItemPickupSystem : SimComponentSystem
