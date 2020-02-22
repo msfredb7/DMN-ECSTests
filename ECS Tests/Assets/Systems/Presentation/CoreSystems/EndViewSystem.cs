@@ -7,13 +7,13 @@ using UnityEngine;
 [UpdateInGroup(typeof(PresentationSystemGroup))]
 public class EndViewSystem : ComponentSystem
 {
-    WorldMaster _worldMaster;
+    SimulationWorldSystem _worldMaster;
 
     protected override void OnCreate()
     {
         base.OnCreate();
 
-        _worldMaster = World.GetOrCreateSystem<WorldMaster>();
+        _worldMaster = World.GetOrCreateSystem<SimulationWorldSystem>();
     }
 
     protected override void OnUpdate()

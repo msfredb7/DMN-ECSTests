@@ -1,17 +1,13 @@
-﻿using Unity.Burst;
-using Unity.Collections;
+﻿using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
-using Unity.Mathematics;
-using Unity.Transforms;
-using static Unity.Mathematics.math;
 
 public class DestroyDanglingViewSystem : ViewJobComponentSystem
 {
     struct DestroyDanglingViewSystemJob : IJobForEachWithEntity<BindedSimEntity>
     {
         public EntityCommandBuffer.Concurrent Ecb;
-        [ReadOnly] public ExclusiveEntityTransaction SimWorld;
+        public SimWorldAccessorJob SimWorld;
 
         public void Execute(Entity viewEntity, int jobIndex, [ReadOnly] ref BindedSimEntity linkedSimEntity)
         {
@@ -34,7 +30,7 @@ public class DestroyDanglingViewSystem : ViewJobComponentSystem
     {
         var jobHandle = new DestroyDanglingViewSystemJob()
         {
-            SimWorld = SimWorldForJobs,
+            SimWorld = SimWorldAccessor.JobAccessor,
             Ecb = _ecbSystem.CreateCommandBuffer().ToConcurrent()
         }.Schedule(this, inputDependencies);
 

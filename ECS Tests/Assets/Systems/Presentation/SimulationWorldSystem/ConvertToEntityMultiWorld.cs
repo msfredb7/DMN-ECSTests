@@ -23,7 +23,7 @@ public abstract class ConvertToEntityMultiWorld : ConvertToEntity
 
     World GetAssociatedWorld()
     {
-        var worldMasterSystem = World.DefaultGameObjectInjectionWorld.GetOrCreateSystem<WorldMaster>();
+        var worldMasterSystem = World.DefaultGameObjectInjectionWorld.GetOrCreateSystem<SimulationWorldSystem>();
         switch (WorldToConvertTo)
         {
             case GameWorldType.Simulation:

@@ -8,23 +8,19 @@ using UnityEngine;
 [UpdateInGroup(typeof(PresentationSystemGroup))]
 public abstract class ViewComponentSystem : ComponentSystem
 {
-    WorldMaster _worldMaster;
-    BeginViewSystem _beginViewSystem;
-    ComponentSystem _aSimSystem;
+    protected SimWorldAccessor SimWorldAccessor { get; private set; }
 
     protected override void OnCreate()
     {
         base.OnCreate();
 
-        _worldMaster = World.GetOrCreateSystem<WorldMaster>();
-        _beginViewSystem = World.GetOrCreateSystem<BeginViewSystem>();
+        World simWorld = World.GetOrCreateSystem<SimulationWorldSystem>().SimulationWorld;
         
-        _aSimSystem = SimWorld.GetExistingSystem<InitializationSystemGroup>();
+        SimWorldAccessor = new SimWorldAccessor(
+            simWorld: simWorld, 
+            beginViewSystem: World.GetOrCreateSystem<BeginViewSystem>(), 
+            someSimSystem: simWorld.GetExistingSystem<SimPreInitializationSystemGroup>()); // could be any system
     }
-
-    protected World SimWorld => _worldMaster.SimulationWorld;
-    protected ExclusiveEntityTransaction ExclusiveSimWorld => _beginViewSystem.ExclusiveSimWorld;
-    protected ComponentSystem SimSystem => _aSimSystem;
 }
 
 [UpdateAfter(typeof(BeginViewSystem))]
@@ -32,21 +28,17 @@ public abstract class ViewComponentSystem : ComponentSystem
 [UpdateInGroup(typeof(PresentationSystemGroup))]
 public abstract class ViewJobComponentSystem : JobComponentSystem
 {
-    WorldMaster _worldMaster;
-    BeginViewSystem _beginViewSystem;
-    ComponentSystem _aSimSystem;
+    protected SimWorldAccessor SimWorldAccessor { get; private set; }
 
     protected override void OnCreate()
     {
         base.OnCreate();
 
-        _worldMaster = World.GetOrCreateSystem<WorldMaster>();
-        _beginViewSystem = World.GetOrCreateSystem<BeginViewSystem>();
+        World simWorld = World.GetOrCreateSystem<SimulationWorldSystem>().SimulationWorld;
 
-        _aSimSystem = SimWorld.GetExistingSystem<InitializationSystemGroup>();
+        SimWorldAccessor = new SimWorldAccessor(
+            simWorld: simWorld,
+            beginViewSystem: World.GetOrCreateSystem<BeginViewSystem>(),
+            someSimSystem: simWorld.GetExistingSystem<SimPreInitializationSystemGroup>()); // could be any system
     }
-
-    protected World SimWorld => _worldMaster.SimulationWorld;
-    protected ExclusiveEntityTransaction SimWorldForJobs => _beginViewSystem.ExclusiveSimWorld;
-    protected ComponentSystem SimSystem => _aSimSystem;
 }

@@ -2,11 +2,6 @@
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
-using Unity.Mathematics;
-using Unity.Transforms;
-using static Unity.Mathematics.math;
-
-
 
 public class ViewBindingSystem : ViewJobComponentSystem
 {
@@ -17,7 +12,7 @@ public class ViewBindingSystem : ViewJobComponentSystem
     {
         base.OnCreate();
 
-        _newSimEntitiesQ = SimWorld.EntityManager.CreateEntityQuery(ComponentType.ReadOnly<NewlyCreatedTag>(), ComponentType.ReadOnly<BlueprintId>());
+        _newSimEntitiesQ = SimWorldAccessor.CreateEntityQuery(ComponentType.ReadOnly<NewlyCreatedTag>(), ComponentType.ReadOnly<BlueprintId>());
         _ecbSystem = World.GetOrCreateSystem<BeginPresentationEntityCommandBufferSystem>();
 
         RequireSingletonForUpdate<BlobAssetReferenceComponent<ViewBindingSystemSettings>>();
