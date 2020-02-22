@@ -1,0 +1,12 @@
+1. ExclusiveEntityTransaction: Changed CheckAccess() to CheckWriteAccess() and CheckReadAccess(). Methods like Exists(entity) and GetComponentData<T>(entity) now only check for read access
+2. Updated Test assemblies so that it compiles with latest Unity Test package.
+
+2020-02-19 Added new methods to get the "component version" within an ArchetypeChunk
+Iterators\ArchetypeChunkArray.cs 
+	+ line 241: public bool DidChange<T>(ComponentType componentType, uint version) where T : struct, ISharedComponentData
+	+ line 289: public uint GetComponentVersion(ComponentType componentType)
+
+2020-02-19 Exposed methods to make it easier to extend the ScriptBehaviourUpdateOrder functionality
+ScriptBehaviourUpdateOrder.cs
+	+/- line 70: private static void InsertManagerIntoSubsystemList -> public static void InsertManagerIntoSubsystemList
+	+/- line 139: internal class DummyDelegateWrapper -> public class DummyDelegateWrapper
